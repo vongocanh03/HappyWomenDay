@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng 8/3 - Em Bé </title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        body {
+            font-family: 'Pacifico', cursive;
+            background: linear-gradient(to right, #eb9b9d, #fad0c4);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: #e60a0a;
+            overflow: auto;
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .heart {
+            position: absolute;
+            /* Đổi từ fixed thành absolute */
+            width: 15px;
+            height: 15px;
+            background: red;
+            transform: rotate(-45deg);
+            animation: floatUp 3s linear forwards;
+            /* Giảm thời gian để bay nhanh hơn */
+            opacity: 1;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -8px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 8px;
+            top: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+
+        header {
+            font-size: 40px;
+            color: #f91090;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .heart-frame {
+            width: 120px;
+            height: 120px;
+            background: url('heart-frame.png') no-repeat center;
+            background-size: contain;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heart-frame img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.9);
+            color: #ff1493;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            font-size: 18px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .love-note {
+            margin-top: 30px;
+            font-size: 20px;
+            background: rgba(255, 105, 180, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .album {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .album img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .album img:hover {
+            transform: scale(1.1);
+        }
+
+        .song {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #toggle-album {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin-top: 20px;
+            /* Giãn cách với love-note */
+        }
+
+        #toggle-album:hover {
+            background: #ff1493;
+        }
+
+        #typed-message {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff1493;
+            text-align: center;
+            margin-top: 20px;
+            white-space: pre-line;
+            min-height: 80px;
+        }
+
+        .album {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .album.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Ẩn modal mặc định */
+        .modal {
+            display: none;
+            /* Đảm bảo modal không hiển thị ban đầu */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal img {
+            width: 400px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        /* Nút đóng */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .gift-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Định dạng số */
+        .number {
+            font-weight: bold;
+            font-size: 24px;
+            color: rgb(10, 10, 10);
+        }
+
+        /* Định dạng chữ (ngày, giờ, phút, giây) */
+        .unit {
+            font-size: 18px;
+            color: rgb(236, 0, 0);
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Chúc mừng ngày 8/3, Em Bé ❤️</h1>
+        </header>
+        <div class="heart">❤️</div>
+        <h2>Em Bé chưởi anh được <span id="daysTogether"></span> rồi! 😅</h2>
+
+
+        <main>
+            <div class="message-container">
+                <div class="heart-frame">
+                    <img src="image/a.jpg" alt="Ảnh bên trái">
+                </div>
+                <div class="message">
+                    <p id="typed-message"></p>
+                </div>
+                <div class="heart-frame">
+                    <img src="image/b.jpg" alt="Ảnh bên phải">
+                </div>
+            </div>
+            <div class="love-note">
+                <p>"Có em bé, cuộc sống của anh trở nên tuyệt vời hơn bao giờ hết. Anh yêu em bé nhiều lắm!" 💕</p>
+            </div>
+            <div class="album-container">
+                <button id="toggle-album">Xem kỷ niệm</button>
+                <div class="album hidden">
+                    <img src="image/b.jpg" alt="Kỷ niệm 1">
+                    <img src="image/a.jpg" alt="Kỷ niệm 2">
+                    <img src="image/d.jpg" alt="Kỷ niệm 3">
+                    <img src="image/f.jpg" alt="Kỷ niệm 4">
+                    <img src="image/e.jpg" alt="Kỷ niệm 1">
+                    <img src="image/j.jpg" alt="Kỷ niệm 2">
+                    <img src="image/t.jpg" alt="Kỷ niệm 3">
+                    <img src="image/g.jpg" alt="Kỷ niệm 4">
+                    <img src="image/h.jpg" alt="Kỷ niệm 1">
+                    <img src="image/i.jpg" alt="Kỷ niệm 2">
+                    <img src="image/k.jpg" alt="Kỷ niệm 3">
+                    <img src="image/l.jpg" alt="Kỷ niệm 4">
+                </div>
+            </div>
+            <!-- Nút tặng quà -->
+            <button class="gift-btn" onclick="openModal()">🎁 Quà nè</button>
+
+            <!-- Modal -->
+            <div id="giftModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                    <img src="image/qua.jpg" alt="Quà tặng">
+                    <h2>Quà của bé đây 😅</h2>
+                </div>
+            </div>
+    </div>
+    </main>
+
+
+    <audio class="song" id="background-music" autoplay loop muted>
+        <source src="music/love-song.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
+
+    </div>
+    <script>
+        function openModal() {
+            document.getElementById("giftModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("giftModal").style.display = "none";
+        }
+
+        // Đóng modal khi bấm bên ngoài
+        window.onclick = function (event) {
+            let modal = document.getElementById("giftModal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        function countDaysTogether() {
+        const startDate = new Date("2023-04-20 00:00:00"); // Ngày bắt đầu
+        const now = new Date(); // Lấy thời gian hiện tại
+        const diff = now - startDate; // Chênh lệch thời gian (milliseconds)
+
+        // Chuyển đổi sang ngày, giờ, phút, giây
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        // Hiển thị kết quả với CSS
+        document.getElementById("daysTogether").innerHTML = 
+            `<span class="number">${days}</span> <span class="unit">ngày</span>
+             <span class="number">${hours}</span> <span class="unit">giờ</span>
+             <span class="number">${minutes}</span> <span class="unit">phút</span>
+             <span class="number">${seconds}</span> <span class="unit">giây</span>`;
+    }
+
+    // Gọi hàm ngay khi trang load
+    countDaysTogether();
+
+    // Cập nhật mỗi giây
+    setInterval(countDaysTogether, 1000);
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            // Đặt vị trí trái tim ngẫu nhiên trên màn hình
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.bottom = '-20px'; // Bắt đầu từ phía dưới màn hình
+            heart.style.animationDuration = Math.random() * 2 + 2 + 's'; // Ngẫu nhiên từ 2s - 4s
+            heart.style.opacity = Math.random() * 0.8 + 0.2; // Hiệu ứng mờ dần
+            heart.style.transform = `scale(${Math.random() * 0.8 + 0.5})`; // Kích thước ngẫu nhiên
+
+            document.body.appendChild(heart);
+
+            // Xóa trái tim sau khi bay hết
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        // Chạy hàm mỗi 200ms để tránh tạo quá nhiều trái tim
+        setInterval(createHeart, 200);
+        document.getElementById("toggle-album").addEventListener("click", function () {
+            const album = document.querySelector(".album");
+            album.classList.toggle("show");
+
+            // Đổi tên nút
+            if (album.classList.contains("show")) {
+                this.textContent = "Ẩn kỷ niệm";
+            } else {
+                this.textContent = "Xem kỷ niệm";
+            }
+        });
+        const message = "Em yêu! 💖 Chúc em có một ngày 8/3 thật hạnh phúc, luôn xinh đẹp và tràn đầy yêu thương!";
+        let index = 0;
+
+        function typeMessage() {
+            if (index < message.length) {
+                document.getElementById("typed-message").innerHTML += message.charAt(index);
+                index++;
+                setTimeout(typeMessage, 70); // Điều chỉnh tốc độ gõ chữ
+            }
+        }
+
+        window.onload = typeMessage;
+        // nhạc
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("background-music");
+
+            function enableAudio() {
+                audio.muted = false;
+                audio.play();
+                document.removeEventListener("click", enableAudio);
+                document.removeEventListener("touchstart", enableAudio);
+            }
+
+            document.addEventListener("click", enableAudio);
+            document.addEventListener("touchstart", enableAudio);
+        });
+    </script>
+</body>
+
+</html>

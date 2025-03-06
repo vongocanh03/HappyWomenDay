@@ -17,6 +17,7 @@
             padding: 0;
             color: #e60a0a;
             overflow: auto;
+
         }
 
         .container {
@@ -197,20 +198,45 @@
             min-height: 80px;
         }
 
-        .album {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 20px;
+        .album-container {
+            display: flex;
+            justify-content: center;
         }
 
-        .album.show {
-            opacity: 1;
-            transform: scale(1);
+        .album {
+            display: grid;
+            gap: 20px;
+            width: 80%;
         }
+
+        .image-row {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .image-row img {
+            width: 50%;
+            border-radius: 10px;
+        }
+
+        /* Hiệu ứng khác nhau cho từng hàng */
+        .image-row:nth-child(odd) {
+            transform: translateX(-50px);
+        }
+
+        .image-row:nth-child(even) {
+            transform: translateX(50px);
+        }
+
+        .image-row.show {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+
 
         /* Ẩn modal mặc định */
         .modal {
@@ -273,6 +299,216 @@
             color: rgb(236, 0, 0);
             margin-right: 8px;
         }
+
+        /* Hộp quà */
+        #gift-box {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 100px auto;
+            cursor: pointer;
+            animation: shake 1.5s infinite ease-in-out;
+        }
+
+        /* Hiệu ứng rung hộp quà */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-3deg);
+            }
+
+            50% {
+                transform: rotate(3deg);
+            }
+
+            75% {
+                transform: rotate(-3deg);
+            }
+        }
+
+        /* Nắp hộp quà */
+        .lid {
+            position: absolute;
+            width: 160px;
+            height: 40px;
+            background: red;
+            top: -20px;
+            left: -5px;
+            border-radius: 5px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Hộp quà */
+        .box {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: gold;
+            border-radius: 5px;
+        }
+
+        /* Dải ruy băng */
+        .ribbon {
+            position: absolute;
+            width: 30px;
+            height: 150px;
+            background: red;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Khi hộp quà mở */
+        .opened .lid {
+            transform: translateY(-50px) rotate(-15deg);
+        }
+
+        /* Hiệu ứng pháo giấy 🎉 */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            opacity: 0;
+            transform: translateY(0);
+            animation: confetti-fall 1s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(100px) rotate(360deg);
+            }
+        }
+
+        /* Hiệu ứng phát sáng */
+        #gift-box::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(rgba(255, 215, 0, 0.6), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .opened::before {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            /* Điều chỉnh kích thước modal */
+            max-width: 90%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-height: 60vh;
+            /* Giới hạn chiều cao modal */
+            overflow: hidden;
+            /* Ngăn modal dài quá */
+        }
+
+        .modal-content {
+            position: relative;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            /* Giới hạn chiều cao của ảnh */
+            border-radius: 10px;
+            object-fit: cover;
+            /* Đảm bảo ảnh không bị méo */
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 350px;
+            height: 350px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            perspective: 1000px;
+            cursor: pointer;
+            display: flex;
+            margin-top: 100px;
+            /* Tạo khoảng cách giữa hộp quà và thiệp */
+
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .card.open .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-front {
+            background-color: #ff4081;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .card-back {
+            background-color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+            color: #ff4081;
+            font-size: 20px;
+        }
     </style>
 </head>
 
@@ -282,7 +518,7 @@
             <h1>Chúc mừng ngày 8/3, Em Bé ❤️</h1>
         </header>
         <div class="heart">❤️</div>
-        <h2>Em Bé chưởi anh được <span id="daysTogether"></span> rồi! 😅</h2>
+        <h2>Em Bé chửi anh được <span id="daysTogether"></span> rồi! 😅</h2>
 
 
         <main>
@@ -301,34 +537,59 @@
                 <p>"Có em bé, cuộc sống của anh trở nên tuyệt vời hơn bao giờ hết. Anh yêu em bé nhiều lắm!" 💕</p>
             </div>
             <div class="album-container">
-                <button id="toggle-album">Xem kỷ niệm</button>
-                <div class="album hidden">
-                    <img src="image/b.jpg" alt="Kỷ niệm 1">
-                    <img src="image/a.jpg" alt="Kỷ niệm 2">
-                    <img src="image/d.jpg" alt="Kỷ niệm 3">
-                    <img src="image/f.jpg" alt="Kỷ niệm 4">
-                    <img src="image/e.jpg" alt="Kỷ niệm 1">
-                    <img src="image/j.jpg" alt="Kỷ niệm 2">
-                    <img src="image/t.jpg" alt="Kỷ niệm 3">
-                    <img src="image/g.jpg" alt="Kỷ niệm 4">
-                    <img src="image/h.jpg" alt="Kỷ niệm 1">
-                    <img src="image/i.jpg" alt="Kỷ niệm 2">
-                    <img src="image/k.jpg" alt="Kỷ niệm 3">
-                    <img src="image/l.jpg" alt="Kỷ niệm 4">
+                <div class="album">
+                    <div class="image-row">
+                        <img src="image/b.jpg" alt="Kỷ niệm 1">
+                        <img src="image/a.jpg" alt="Kỷ niệm 2">
+                    </div>
+                    <div class="image-row">
+                        <img src="image/d.jpg" alt="Kỷ niệm 3">
+                        <img src="image/f.jpg" alt="Kỷ niệm 4">
+                    </div>
+                    <div class="image-row">
+                        <img src="image/e.jpg" alt="Kỷ niệm 5">
+                        <img src="image/j.jpg" alt="Kỷ niệm 6">
+                    </div>
+                    <div class="image-row">
+                        <img src="image/t.jpg" alt="Kỷ niệm 7">
+                        <img src="image/g.jpg" alt="Kỷ niệm 8">
+                    </div>
                 </div>
             </div>
-            <!-- Nút tặng quà -->
-            <button class="gift-btn" onclick="openModal()">🎁 Quà nè</button>
 
-            <!-- Modal -->
-            <div id="giftModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-btn" onclick="closeModal()">&times;</span>
-                    <img src="image/qua.jpg" alt="Quà tặng">
-                    <h2>Quà của bé đây 😅</h2>
-                </div>
-            </div>
     </div>
+    <div class="gift-container">
+        <!-- Hộp quà -->
+        <div id="gift-box" onclick="openGift()">
+            <div class="lid"></div>
+            <div class="box"></div>
+            <div class="ribbon"></div>
+        </div>
+
+        <!-- Pháo giấy 🎉 -->
+        <div id="confetti-container"></div>
+
+        <!-- Modal quà tặng -->
+        <div id="giftModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <img src="image/qua.jpg" alt="Quà tặng">
+                <h2>Quà của bé đây 😅</h2>
+            </div>
+        </div>
+
+        <div class="card" id="greetingCard">
+            <div class="card-inner">
+                <div class="card-front">💌 Mở thiệp 💌</div>
+                <div class="card-back">🌸 Chúc mừng 8/3! 🌸<br>Anh xin lỗi vì 8/3 năm nay lại không thể ở bên bé được.
+                    Cảm ơn bé vì đã luôn ở bên anh trong suốt thời gian qua, chia sẻ cho anh những gì tốt đẹp nhất.
+                    Chúc bé của anh luôn vui vẻ, hạnh phúc và thành công trên con đường sắp tới nhé💖 Anh nhớ em bé
+                    nhiều lắm</div>
+            </div>
+        </div>
+    </div>
+    </div>
+
     </main>
 
 
@@ -339,45 +600,85 @@
 
     </div>
     <script>
-        function openModal() {
-            document.getElementById("giftModal").style.display = "flex";
+        document.getElementById("greetingCard").addEventListener("click", function () {
+            this.classList.toggle("open");
+        });
+        function openGift() {
+            let giftBox = document.getElementById("gift-box");
+            giftBox.classList.add("opened");
+
+            // Phát âm thanh mở hộp quà
+            let audio = new Audio("sound/open-gift.mp3");
+            audio.play();
+
+            // Hiển thị pháo giấy 🎉
+            for (let i = 0; i < 10; i++) {
+                let confetti = document.createElement("div");
+                confetti.className = "confetti";
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.left = Math.random() * 100 + "%";
+                confetti.style.animationDelay = Math.random() * 0.5 + "s";
+                document.getElementById("confetti-container").appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 1000);
+            }
+
+            // Chờ hộp quà mở xong rồi mới hiển thị modal
+            setTimeout(() => {
+                document.getElementById("giftModal").style.display = "block";
+            }, 800);
+
         }
 
+        // Hàm đóng modal
         function closeModal() {
             document.getElementById("giftModal").style.display = "none";
+            document.getElementById("gift-box").classList.remove("opened");
         }
 
-        // Đóng modal khi bấm bên ngoài
-        window.onclick = function (event) {
+        // Thêm sự kiện đóng modal khi bấm ngoài modal
+        document.addEventListener("click", function (event) {
             let modal = document.getElementById("giftModal");
-            if (event.target === modal) {
+            let modalContent = document.querySelector(".modal-content"); // Thay bằng class của nội dung modal
+
+            // Nếu bấm ra ngoài modal-content (phần modal hiển thị)
+            if (modal && modalContent && !modalContent.contains(event.target)) {
                 closeModal();
             }
+        });
+
+
+        // Hàm random màu sắc cho pháo giấy
+        function getRandomColor() {
+            let colors = ["#ff0000", "#ff8000", "#ffff00", "#00ff00", "#00ffff", "#0000ff", "#8000ff"];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
+
+
         function countDaysTogether() {
-        const startDate = new Date("2023-04-20 00:00:00"); // Ngày bắt đầu
-        const now = new Date(); // Lấy thời gian hiện tại
-        const diff = now - startDate; // Chênh lệch thời gian (milliseconds)
+            const startDate = new Date("2023-04-20 00:00:00"); // Ngày bắt đầu
+            const now = new Date(); // Lấy thời gian hiện tại
+            const diff = now - startDate; // Chênh lệch thời gian (milliseconds)
 
-        // Chuyển đổi sang ngày, giờ, phút, giây
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
+            // Chuyển đổi sang ngày, giờ, phút, giây
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
 
-        // Hiển thị kết quả với CSS
-        document.getElementById("daysTogether").innerHTML = 
-            `<span class="number">${days}</span> <span class="unit">ngày</span>
+            // Hiển thị kết quả với CSS
+            document.getElementById("daysTogether").innerHTML =
+                `<span class="number">${days}</span> <span class="unit">ngày</span>
              <span class="number">${hours}</span> <span class="unit">giờ</span>
              <span class="number">${minutes}</span> <span class="unit">phút</span>
              <span class="number">${seconds}</span> <span class="unit">giây</span>`;
-    }
+        }
 
-    // Gọi hàm ngay khi trang load
-    countDaysTogether();
+        // Gọi hàm ngay khi trang load
+        countDaysTogether();
 
-    // Cập nhật mỗi giây
-    setInterval(countDaysTogether, 1000);
+        // Cập nhật mỗi giây
+        setInterval(countDaysTogether, 1000);
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -397,18 +698,25 @@
 
         // Chạy hàm mỗi 200ms để tránh tạo quá nhiều trái tim
         setInterval(createHeart, 200);
-        document.getElementById("toggle-album").addEventListener("click", function () {
-            const album = document.querySelector(".album");
-            album.classList.toggle("show");
+        document.addEventListener("DOMContentLoaded", function () {
+            const rows = document.querySelectorAll(".image-row");
 
-            // Đổi tên nút
-            if (album.classList.contains("show")) {
-                this.textContent = "Ẩn kỷ niệm";
-            } else {
-                this.textContent = "Xem kỷ niệm";
-            }
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("show");
+                        }
+                    });
+                },
+                { threshold: 0.5 }
+            );
+
+            rows.forEach((row) => observer.observe(row));
         });
-        const message = "Em yêu! 💖 Chúc em có một ngày 8/3 thật hạnh phúc, luôn xinh đẹp và tràn đầy yêu thương!";
+
+
+        const message = "Bé yêu! 💖 Chúc em có một ngày 8/3 thật hạnh phúc, luôn xinh đẹp và tràn đầy yêu thương!";
         let index = 0;
 
         function typeMessage() {

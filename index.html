@@ -201,6 +201,7 @@
         .album-container {
             display: flex;
             justify-content: center;
+            margin-top: 50px;
         }
 
         .album {
@@ -212,22 +213,23 @@
         .image-row {
             display: flex;
             gap: 10px;
-            opacity: 0;
-            transition: opacity 1s ease, transform 1s ease;
+            opacity: 1;
+            transition: none;
         }
 
         /* Hiệu ứng khác nhau cho từng hàng */
         .image-row:nth-child(odd) {
-            transform: translateY(50px);
+            transform: translateX(-50px);
         }
 
         .image-row:nth-child(even) {
-            transform: translateY(-50px);
+            transform: translateX(50px);
         }
 
-        .image-row.show {
+        /* Khi cuộn đến, hàng xuất hiện */
+        .album.show .image-row {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(0);
         }
 
         .image-row img {
@@ -555,15 +557,16 @@
                         <img src="image/g.jpg" alt="Kỷ niệm 8">
                     </div>
                     <div class="image-row">
-                        <img src="image/h.jpg" alt="Kỷ niệm 7">
-                        <img src="image/i.jpg" alt="Kỷ niệm 8">
+                        <img src="image/h.jpg" alt="Kỷ niệm 9">
+                        <img src="image/i.jpg" alt="Kỷ niệm 10">
                     </div>
                     <div class="image-row">
-                        <img src="image/k.jpg" alt="Kỷ niệm 7">
-                        <img src="image/l.jpg" alt="Kỷ niệm 8">
+                        <img src="image/k.jpg" alt="Kỷ niệm 11">
+                        <img src="image/l.jpg" alt="Kỷ niệm 12">
                     </div>
                 </div>
             </div>
+
 
     </div>
     <div class="gift-container">
@@ -706,31 +709,25 @@
 
         // Chạy hàm mỗi 200ms để tránh tạo quá nhiều trái tim
         setInterval(createHeart, 200);
+        // ảnh
         document.addEventListener("DOMContentLoaded", function () {
             const rows = document.querySelectorAll(".image-row");
-            let index = 0;
-
-            function showNextRow() {
-                if (index < rows.length) {
-                    rows[index].classList.add("show");
-                    index++;
-                    setTimeout(showNextRow, 500); // Xuất hiện từng hàng cách nhau 0.5s
-                }
-            }
 
             const observer = new IntersectionObserver(
-                (entries) => {
+                (entries, observer) => {
                     entries.forEach((entry) => {
-                        if (entry.isIntersecting && index === 0) {
-                            showNextRow();
-                            observer.disconnect();
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("show");
+                            observer.unobserve(entry.target);
                         }
                     });
                 },
-                { threshold: 0.5 }
+                { threshold: 0.3 }
             );
 
-            observer.observe(document.querySelector(".album"));
+            rows.forEach((row) => {
+                observer.observe(row);
+            });
         });
 
 

@@ -213,8 +213,21 @@
             display: flex;
             gap: 10px;
             opacity: 0;
-            transform: translateY(50px);
             transition: opacity 1s ease, transform 1s ease;
+        }
+
+        /* Hiệu ứng khác nhau cho từng hàng */
+        .image-row:nth-child(odd) {
+            transform: translateY(50px);
+        }
+
+        .image-row:nth-child(even) {
+            transform: translateY(-50px);
+        }
+
+        .image-row.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .image-row img {
@@ -222,19 +235,6 @@
             border-radius: 10px;
         }
 
-        /* Hiệu ứng khác nhau cho từng hàng */
-        .image-row:nth-child(odd) {
-            transform: translateX(-50px);
-        }
-
-        .image-row:nth-child(even) {
-            transform: translateX(50px);
-        }
-
-        .image-row.show {
-            opacity: 1;
-            transform: translateX(0) translateY(0);
-        }
 
 
 
@@ -554,6 +554,14 @@
                         <img src="image/t.jpg" alt="Kỷ niệm 7">
                         <img src="image/g.jpg" alt="Kỷ niệm 8">
                     </div>
+                    <div class="image-row">
+                        <img src="image/h.jpg" alt="Kỷ niệm 7">
+                        <img src="image/i.jpg" alt="Kỷ niệm 8">
+                    </div>
+                    <div class="image-row">
+                        <img src="image/k.jpg" alt="Kỷ niệm 7">
+                        <img src="image/l.jpg" alt="Kỷ niệm 8">
+                    </div>
                 </div>
             </div>
 
@@ -700,19 +708,29 @@
         setInterval(createHeart, 200);
         document.addEventListener("DOMContentLoaded", function () {
             const rows = document.querySelectorAll(".image-row");
+            let index = 0;
+
+            function showNextRow() {
+                if (index < rows.length) {
+                    rows[index].classList.add("show");
+                    index++;
+                    setTimeout(showNextRow, 500); // Xuất hiện từng hàng cách nhau 0.5s
+                }
+            }
 
             const observer = new IntersectionObserver(
                 (entries) => {
                     entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add("show");
+                        if (entry.isIntersecting && index === 0) {
+                            showNextRow();
+                            observer.disconnect();
                         }
                     });
                 },
                 { threshold: 0.5 }
             );
 
-            rows.forEach((row) => observer.observe(row));
+            observer.observe(document.querySelector(".album"));
         });
 
 
